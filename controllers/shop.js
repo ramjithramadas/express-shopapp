@@ -32,9 +32,21 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-   res.render("shop/cart", {
-      path: "/cart",
-      pageTitle: "Your Cart",
+   Product.fetchAll((products) => {
+      Cart.fetchCartProducts(products, (cart) => {
+         res.render("shop/cart", {
+            cart: cart,
+            path: "/cart",
+            pageTitle: "Your Cart",
+         });
+      });
+   });
+};
+
+exports.deleteCartItem = (req, res, next) => {
+   Product.fetchAll((products) => {
+      Cart.removeCartItem(req.body.id, products);
+      res.redirect("/cart");
    });
 };
 
