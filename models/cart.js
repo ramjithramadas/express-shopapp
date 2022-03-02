@@ -48,8 +48,12 @@ module.exports = class Cart {
                }
             }
          }
+         let deletedProduct = cart.products.find((p) => p.id === id);
          let updatedCart = cart.products.filter((p) => p.id !== id);
          cart.products = updatedCart;
+         cart.totalPrice = cart.totalPrice - +deletedProduct.productDetails.price * deletedProduct.quantity;
+         console.log(deletedProduct, "deletedProduct");
+         console.log(cart, "cart");
          fs.writeFile(p, JSON.stringify(cart), (err) => {
             console.log(err);
          });
