@@ -11,8 +11,6 @@ exports.getProducts = (req, res, next) => {
    // });
    Product.fetchAll()
       .then((result) => {
-         console.log(result[0]);
-         // return result[0];
          res.render("shop/product-list", {
             prods: result[0],
             pageTitle: "All Products",
@@ -25,13 +23,22 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getProduct = (req, res, next) => {
-   Product.fetchById(req.params.id, (product) => {
-      res.render("shop/product-detail", {
-         product: product,
-         pageTitle: product.title,
-         path: "/products",
-      });
-   });
+   // Product.fetchById(req.params.id, (product) => {
+   //    res.render("shop/product-detail", {
+   //       product: product,
+   //       pageTitle: product.title,
+   //       path: "/products",
+   //    });
+   // });
+   Product.fetchById(req.params.id)
+      .then(([[product], fieldData]) =>
+         res.render("shop/product-detail", {
+            product: product,
+            pageTitle: product.title,
+            path: "/products",
+         })
+      )
+      .catch((err) => console.error(err));
 };
 
 exports.getIndex = (req, res, next) => {

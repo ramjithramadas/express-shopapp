@@ -27,13 +27,19 @@ module.exports = class Product {
 
    save() {
       // this.id = uid();
-      getProductsFromFile((products) => {
-         console.log(this, "thisss");
-         products.push(this);
-         fs.writeFile(p, JSON.stringify(products), (err) => {
-            console.log(err);
-         });
-      });
+      // getProductsFromFile((products) => {
+      //    console.log(this, "thisss");
+      //    products.push(this);
+      //    fs.writeFile(p, JSON.stringify(products), (err) => {
+      //       console.log(err);
+      //    });
+      // });
+      return db.execute("INSERT INTO products (title,price,description,imageUrl) VALUES(?,?,?,?)", [
+         this.title,
+         this.price,
+         this.description,
+         this.imageUrl,
+      ]);
    }
 
    update() {
@@ -52,11 +58,12 @@ module.exports = class Product {
       return db.execute("SELECT * FROM products");
    }
 
-   static fetchById(id, cb) {
-      getProductsFromFile((products) => {
-         const product = products.find((p) => p.id === id);
-         cb(product);
-      });
+   static fetchById(id) {
+      // getProductsFromFile((products) => {
+      //    const product = products.find((p) => p.id === id);
+      //    cb(product);
+      // });
+      return db.execute(`SELECT * FROM products WHERE products.id=?`, [id]);
    }
 
    static deleteById(id) {
