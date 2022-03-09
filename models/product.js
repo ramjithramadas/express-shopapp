@@ -26,14 +26,6 @@ module.exports = class Product {
    }
 
    save() {
-      // this.id = uid();
-      // getProductsFromFile((products) => {
-      //    console.log(this, "thisss");
-      //    products.push(this);
-      //    fs.writeFile(p, JSON.stringify(products), (err) => {
-      //       console.log(err);
-      //    });
-      // });
       return db.execute("INSERT INTO products (title,price,description,imageUrl) VALUES(?,?,?,?)", [
          this.title,
          this.price,
@@ -54,15 +46,10 @@ module.exports = class Product {
    }
 
    static fetchAll() {
-      // getProductsFromFile(cb);
       return db.execute("SELECT * FROM products");
    }
 
    static fetchById(id) {
-      // getProductsFromFile((products) => {
-      //    const product = products.find((p) => p.id === id);
-      //    cb(product);
-      // });
       return db.execute(`SELECT * FROM products WHERE products.id=?`, [id]);
    }
 
