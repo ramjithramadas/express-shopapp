@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { uid } = require("../util/utils");
 const Cart = require("./cart");
+const db = require("../util/database");
 
 const p = path.join(path.dirname(require.main.filename), "data", "products.json");
 
@@ -46,8 +47,9 @@ module.exports = class Product {
       });
    }
 
-   static fetchAll(cb) {
-      getProductsFromFile(cb);
+   static fetchAll() {
+      // getProductsFromFile(cb);
+      return db.execute("SELECT * FROM products");
    }
 
    static fetchById(id, cb) {
