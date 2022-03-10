@@ -2,8 +2,10 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const errorController = require("./controllers/error");
+const dotenv = require("dotenv");
 
 const app = express();
+dotenv.config();
 
 app.set("view engine", "ejs");
 app.set("views", "views");
