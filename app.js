@@ -26,7 +26,7 @@ app.use(errorController.get404);
 
 sequelize
    .sync()
-   .then((result) =>
+   .then(() =>
       app.listen(3001, () => {
          console.log("Server is running on port 3001");
       })

@@ -41,13 +41,24 @@ exports.postAddProduct = (req, res, next) => {
    const imageUrl = req.body.imageUrl;
    const price = req.body.price;
    const description = req.body.description;
-   const product = new Product(id, title, imageUrl, description, price);
-   product
-      .save()
-      .then(() => {
+   // const product = new Product(id, title, imageUrl, description, price);
+   // product
+   //    .save()
+   //    .then(() => {
+   //       res.redirect("/");
+   //    })
+   //    .catch((err) => console.error(err));
+   Product.create({
+      title: title,
+      imageUrl: imageUrl,
+      price: price,
+      description: description,
+   })
+      .then((result) => {
+         //  console.log(result);
          res.redirect("/");
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.log(err));
 };
 
 exports.deleteProduct = (req, res, next) => {
