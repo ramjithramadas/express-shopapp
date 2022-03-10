@@ -14,15 +14,30 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getProduct = (req, res, next) => {
-   Product.fetchById(req.params.id)
-      .then(([[product], fieldData]) =>
+   Product.findAll({
+      where: {
+         id: req.params.id,
+      },
+   })
+      .then(([product]) => {
+         // console.log(product);
          res.render("shop/product-detail", {
             product: product,
             pageTitle: product.title,
             path: "/products",
-         })
-      )
+         });
+      })
       .catch((err) => console.error(err));
+   // Product.findByPk(req.params.id)
+   //    .then((product) => {
+   //      // console.log(product);
+   //       res.render("shop/product-detail", {
+   //          product: product,
+   //          pageTitle: product.title,
+   //          path: "/products",
+   //       });
+   //    })
+   //    .catch((err) => console.error(err));
 };
 
 exports.getIndex = (req, res, next) => {
