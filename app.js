@@ -8,6 +8,8 @@ const sequelize = require("./util/database");
 
 const Product = require("./models/product");
 const User = require("./models/user");
+const Cart = require("./models/cart");
+const CartItem = require("./models/cart-item");
 
 const app = express();
 dotenv.config();
@@ -40,6 +42,10 @@ app.use(errorController.get404);
 
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Product.belongsToMany(Cart, { through: CartItem });
+Cart.belongsToMany(Product, { through: CartItem });
 
 sequelize
    //.sync({ force: true })
@@ -52,6 +58,9 @@ sequelize
          return User.create({ name: "Ram", email: "ram@yopmail.com" });
       }
       return user;
+   })
+   .then((user) => {
+      return user.createCart();
    })
    .then(() => {
       app.listen(3001, () => {
