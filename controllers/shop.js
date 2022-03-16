@@ -75,50 +75,28 @@ exports.postCart = (req, res, next) => {
         .catch((err) => console.error(err));
 };
 
-// exports.getOrders = (req, res, next) => {
-//    req.user
-//       .getOrders({ include: ["products"] })
-//       .then((orders) => {
-//          res.render("shop/orders", {
-//             path: "/orders",
-//             pageTitle: "Your Orders",
-//             orders: orders,
-//          });
-//       })
-//       .catch((err) => console.log(err));
-// };
+exports.getOrders = (req, res, next) => {
+    req.user
+        .getOrders()
+        .then((orders) => {
+            res.render("shop/orders", {
+                path: "/orders",
+                pageTitle: "Your Orders",
+                orders: orders,
+            });
+        })
+        .catch((err) => console.log(err));
+};
 
-// exports.postOrder = (req, res, next) => {
-//    let fetchedCart;
-//    req.user
-//       .getCart()
-//       .then((cart) => {
-//          fetchedCart = cart;
-//          //  console.log(cart, "cartcart");
-//          return cart.getProducts();
-//       })
-//       .then((products) => {
-//          // console.log(products, "productsproducts");
-//          return req.user
-//             .createOrder()
-//             .then((order) => {
-//                return order.addProducts(
-//                   products.map((product) => {
-//                      product.orderItem = { quantity: product.cartItem.quantity };
-//                      return product;
-//                   })
-//                );
-//             })
-//             .catch((err) => console.log(err));
-//       })
-//       .then(() => {
-//          return fetchedCart.setProducts(null);
-//       })
-//       .then(() => {
-//          res.redirect("/orders");
-//       })
-//       .catch((err) => console.log(err));
-// };
+exports.postOrder = (req, res, next) => {
+    let fetchedCart;
+    req.user
+        .addOrder()
+        .then(() => {
+            res.redirect("/orders");
+        })
+        .catch((err) => console.log(err));
+};
 
 // exports.getCheckout = (req, res, next) => {
 //    res.render("shop/checkout", {
