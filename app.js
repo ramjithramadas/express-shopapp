@@ -8,7 +8,7 @@ const sequelize = require("./util/database");
 const main = require("./util/database");
 
 // const Product = require("./models/product");
-// const User = require("./models/user");
+const User = require("./models/user");
 // const Cart = require("./models/cart");
 // const CartItem = require("./models/cart-item");
 // const Order = require("./models/order");
@@ -30,13 +30,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-   // User.findByPk(1)
-   //    .then((user) => {
-   //       req.user = user;
-   //       next();
-   //    })
-   //    .catch((err) => console.log(err));
-   next();
+    User.findById("62316653a6f5327198f5f676")
+        .then((user) => {
+            req.user = user;
+            next();
+        })
+        .catch((err) => console.log(err));
 });
 
 app.use("/admin", adminRoutes);
@@ -46,7 +45,7 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 mongoConnect(() => {
-   app.listen(3001, () => {
-      console.log("Server is running on port 3001");
-   });
+    app.listen(3001, () => {
+        console.log("Server is running on port 3001");
+    });
 });
