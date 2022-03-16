@@ -15,8 +15,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const URL =
-   "mongodb+srv://ramjithramadas:gOTiqHLFOXoqkZ9T@cluster0.tyzd0.mongodb.net/expressShopApp?retryWrites=true&w=majority";
+const URL = process.env.ATLAS_URI
 
 let _db;
 
