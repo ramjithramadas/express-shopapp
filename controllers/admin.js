@@ -12,13 +12,18 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res, next) => {
-    const id = uid();
+    //   const id = uid();
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const userId = req.user._id;
-    const product = new Product(title, price, description, imageUrl, userId);
+    //  const userId = req.user._id;
+    const product = new Product({
+        title: title,
+        price: price,
+        description: description,
+        imageUrl: imageUrl,
+    });
     product
         .save()
         .then(() => {
@@ -49,9 +54,15 @@ exports.postEditProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new Product(title, price, description, imageUrl);
-    product
-        .update(prodId)
+    // const product = new Product(title, price, description, imageUrl);
+    Product.findById(prodId)
+        .then((product) => {
+            product.title = title;
+            product.imageUrl = imageUrl;
+            product.price = price;
+            product.description = description;
+            return product.save();
+        })
         .then(() => {
             res.redirect("/admin/products");
         })
@@ -61,13 +72,13 @@ exports.postEditProduct = (req, res, next) => {
 exports.deleteProduct = (req, res, next) => {
     const prodId = req.params.id;
     console.log(prodId, "prodId");
-    Product.deleteById(prodId)
+    Product.findByIdAndRemove(prodId)
         .then(() => res.redirect("/admin/products"))
         .catch((err) => console.log(err));
 };
 
 exports.getProducts = (req, res, next) => {
-    Product.findAll()
+    Product.find()
         .then((products) => {
             //console.log(products);
             res.render("admin/products", {
