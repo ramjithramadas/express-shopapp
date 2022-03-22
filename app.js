@@ -9,7 +9,7 @@ const sequelize = require("./util/database");
 const main = require("./util/database");
 
 // const Product = require("./models/product");
-// const User = require("./models/user");
+const User = require("./models/user");
 // const Cart = require("./models/cart");
 // const CartItem = require("./models/cart-item");
 // const Order = require("./models/order");
@@ -30,14 +30,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // to serve statically -->
 app.use(express.static(path.join(__dirname, "public")));
 
-// app.use((req, res, next) => {
-//     User.findById("6231d376a6f5327198f5f68b")
-//         .then((user) => {
-//             req.user = new User(user.username, user.email, user.cart, user._id);
-//             next();
-//         })
-//         .catch((err) => console.log(err));
-// });
+app.use((req, res, next) => {
+    User.findById("6239e52c3805d7a4b1775e4b")
+        .then((user) => {
+            req.user = user;
+            next();
+        })
+        .catch((err) => console.log(err));
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -54,6 +54,19 @@ app.use(errorController.get404);
 mongoose
     .connect(process.env.ATLAS_URI)
     .then(() => {
+        User.findOne().then((user) => {
+            if (!user) {
+                const user = new User({
+                    name: "Ram",
+                    email: "ram@test.com",
+                    cart: {
+                        items: [],
+                    },
+                });
+                user.save();
+            }
+        });
+
         app.listen(3001, () => {
             console.log("Server is running on port 3001");
         });
