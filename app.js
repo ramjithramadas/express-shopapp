@@ -9,6 +9,7 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const errorController = require("./controllers/error");
 const sequelize = require("./util/database");
 const main = require("./util/database");
+const isAuth = require("./middlewares/is-auth");
 
 // const Product = require("./models/product");
 const User = require("./models/user");
@@ -57,7 +58,7 @@ app.use((req, res, next) => {
         .catch((err) => console.log(err));
 });
 
-app.use("/admin", adminRoutes);
+app.use("/admin", isAuth, adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
