@@ -2,12 +2,16 @@ const Product = require("../models/product");
 const { uid } = require("../util/utils");
 
 exports.getAddProduct = (req, res, next) => {
+    if (!req.session.isLoggedIn) {
+        return res.redirect("/login");
+    }
     res.render("admin/add-product", {
         pageTitle: "Add Product",
         path: "/admin/add-product",
         formsCSS: true,
         productCSS: true,
         activeAddProduct: true,
+        isAuthenticated: req.session.isLoggedIn,
     });
 };
 
@@ -34,6 +38,9 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getEditProduct = (req, res, next) => {
+    if (!req.session.isLoggedIn) {
+        return res.redirect("/login");
+    }
     const prodId = req.params.id;
     Product.findById(prodId)
         .then((product) => {
@@ -44,6 +51,7 @@ exports.getEditProduct = (req, res, next) => {
                 formsCSS: true,
                 productCSS: true,
                 activeAddProduct: true,
+                isAuthenticated: req.session.isLoggedIn,
             });
         })
         .catch((err) => console.error(err));
@@ -79,6 +87,9 @@ exports.deleteProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
+    if (!req.session.isLoggedIn) {
+        return res.redirect("/login");
+    }
     Product.find()
         .then((products) => {
             //console.log(products);
@@ -86,6 +97,7 @@ exports.getProducts = (req, res, next) => {
                 prods: products,
                 pageTitle: "Admin Products",
                 path: "/admin/products",
+                isAuthenticated: req.session.isLoggedIn,
             });
         })
         .catch((err) => console.error(err));
