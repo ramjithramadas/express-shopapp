@@ -1,5 +1,16 @@
 const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+const sgTransport = require("nodemailer-sendgrid-transport");
+
 const User = require("../models/user");
+
+const mailer = nodemailer.createTransport(
+    sgTransport({
+        auth: {
+            api_key: process.env.SENDGRID_API_KEY,
+        },
+    })
+);
 
 exports.getLogin = (req, res, next) => {
     let message = req.flash("error");
@@ -93,7 +104,15 @@ exports.postSignup = (req, res, next) => {
                 })
                 .then(() => {
                     res.redirect("/login");
-                });
+                    return mailer.sendMail({
+                        to: email,
+                        from: process.env.EMAIL_FROM,
+                        subject: "Account created",
+                        text: "Your express shop account created successfully",
+                        html: `<b>Account created successfully at ${new Date()}</b>`,
+                    });
+                })
+                .catch((err) => console.log(err));
         })
         .catch((err) => console.log(err));
 };
